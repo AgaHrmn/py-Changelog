@@ -50,13 +50,13 @@ if __name__ == "__main__":
 
 #ostrza_2024
     sorted_column_ostrza_zastosowanie_24 = sort_column_alphabetically(ostrza_2024, [9])
-    processed_ostrza_24 = capitalize_column_values(sorted_column_ostrza_zastosowanie_24, [1,2,7,9])
+    processed_ostrza_24 = clear_white_space(capitalize_column_values(sorted_column_ostrza_zastosowanie_24, [1,2,7,9]))
     print("ostrza_processed")
     for v in processed_ostrza_24:
         print(f"{v}\n")
 
 #elektronarzedzia_2024
-    processed_elektronarzedzia_24 = capitalize_column_values(elektronarzedzia_2024, [1,3,5,6])
+    processed_elektronarzedzia_24 = clear_white_space(capitalize_column_values(elektronarzedzia_2024, [1,3,5,6]))
     print("elektronarzedzia_processed")
     for v in processed_elektronarzedzia_24:
         print(f"{v}\n")

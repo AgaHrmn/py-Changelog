@@ -65,6 +65,16 @@ def capitalize_column_values(rows, column_nums):
             capitalized_rows.append(capitalized_row)
     return capitalized_rows
 
+def clear_white_space(rows):
+    clean_rows = []
+    for row in rows:
+        clean_row = list(row) #copy of row to mdidy
+        for cell in row:
+            cleaned = str(cell).strip()
+            clean_row.append(cleaned)
+        clean_rows.append(clean_row)
+    return clean_rows
+
 
 def save_data(data, output_file):
     if not os.path.exists("processed"):
