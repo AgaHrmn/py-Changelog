@@ -18,20 +18,14 @@ def download_file(url, save_path):
 
 
 def load_data(xlsx_file):
-    sheets_list = []
     workbook = load_workbook(filename=xlsx_file)
-    sheets = workbook.sheetnames
+    sheets_list = []
 
-    for sheet in sheets:
-        worksheet = workbook[sheet]
-        sheet_dict = {}
-        rows = []
+    for sheet_name in workbook.sheetnames:
+        worksheet = workbook[sheet_name]
+        rows = list(worksheet.iter_rows(values_only=True))
+        sheets_list.append({sheet_name: rows})
 
-        for row in worksheet.iter_rows(values_only=True):
-            rows.append(row)
-
-        sheet_dict[sheet]=rows
-        sheets_list.append(sheet_dict)
     return sheets_list
 
 
@@ -82,8 +76,17 @@ def save_data(data, output_file):
     workbook = Workbook()
 
     for sheet_name, rows in data.items():
-        worksheet = workbook.create_sheet(title=sheet_name)
-        for row in rows:
-            worksheet.append(row)
+        if rows:
+            print(f"Saving {len(rows)} rows for sheet: {sheet_name}")
+            worksheet = workbook.create_sheet(title=sheet_name)
+            for row in rows:
+                worksheet.append(row)
+        else:
+            print(f"No data found for sheet: {sheet_name}")
+
+
+        # worksheet = workbook.create_sheet(title=sheet_name)
+        # for row in rows:
+        #     worksheet.append(row)
 
     workbook.save(filename=output_file)
