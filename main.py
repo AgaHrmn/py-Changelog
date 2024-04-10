@@ -62,7 +62,8 @@ if __name__ == "__main__":
         'Elektronarzedzia' : processed_elektronarzedzia_24,
         'Ostrza' : processed_ostrza_24
     }
-
+    
+#find missing or added records in file 2 based on ID column
     changes = show_changes(processed_2023, processed_2024)
     print(changes)
 
