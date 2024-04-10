@@ -13,34 +13,58 @@ if __name__ == "__main__":
     #     file_path = os.path.join("download", f"file{i}.xlsx")
     #     download_file(url, file_path)
         
+# 2023
     year_2023_path = r"download\file1.xlsx"
-    # year_2024_path = r"download\file2.xlsx"
-    
     sheets_2023 = load_data(year_2023_path)
     elektronarzedzia_2023 = sheets_2023[1]['Elektronarzedzia']
     ostrza_2023 = sheets_2023[2]['Ostrza']
 
 #ostrza_2023
-    sorted_column_ostrza_zastosowanie = sort_column_alphabetically(ostrza_2023, 9)
-    capitalized_nazwa = capitalize_column_values(ostrza_2023, 1)
-    capitalized_typ = capitalize_column_values(ostrza_2023, 2)
-    capitalized_material = capitalize_column_values(ostrza_2023, 7)
-    capitalized_zastosowanie = capitalize_column_values(ostrza_2023, 9)
+    sorted_column_ostrza_zastosowanie_23 = sort_column_alphabetically(ostrza_2023, [9])
+    processed_ostrza_23 = capitalize_column_values(sorted_column_ostrza_zastosowanie_23, [1,2,7,9])
     print("ostrza_processed")
-    print(sorted_column_ostrza_zastosowanie)
-    print(capitalized_nazwa)
-    print(capitalized_typ)
-    print(capitalized_material)
-    print(capitalized_zastosowanie)
+    for v in processed_ostrza_23:
+        print(f"{v}\n")
 
 #elektronarzedzia_2023
-    capitalized_nazwa = capitalize_column_values(elektronarzedzia_2023, 1)
-    capitalized_typ_ostrza = capitalize_column_values(elektronarzedzia_2023, 3)
-    capitalized_typ_silnika = capitalize_column_values(elektronarzedzia_2023, 5)
-    capitalized_typ_zasilania = capitalize_column_values(elektronarzedzia_2023, 6)
+    processed_elektronarzedzia_23 = capitalize_column_values(elektronarzedzia_2023, [1,3,5,6])
     print("elektronarzedzia_processed")
-    print(capitalized_nazwa)
-    print(capitalized_typ_ostrza)
-    print(capitalized_typ_silnika)
-    print(capitalized_typ_zasilania)
+    for v in processed_elektronarzedzia_23:
+        print(f"{v}\n")
 
+#save to new file
+    processed_2023 = {
+        'Elektronarzedzia' : processed_elektronarzedzia_23,
+        'Ostrza' : processed_ostrza_23
+    }
+
+    save_data(processed_2023, r"processed\processed_2023.xlsx")
+
+#################################################################################################################
+
+#2024
+    year_2024_path = r"download\file2.xlsx"
+    sheets_2024 = load_data(year_2024_path)
+    elektronarzedzia_2024 = sheets_2024[1]['Elektronarzedzia']
+    ostrza_2024 = sheets_2024[2]['Ostrza']
+
+#ostrza_2024
+    sorted_column_ostrza_zastosowanie_24 = sort_column_alphabetically(ostrza_2024, [9])
+    processed_ostrza_24 = capitalize_column_values(sorted_column_ostrza_zastosowanie_24, [1,2,7,9])
+    print("ostrza_processed")
+    for v in processed_ostrza_24:
+        print(f"{v}\n")
+
+#elektronarzedzia_2024
+    processed_elektronarzedzia_24 = capitalize_column_values(elektronarzedzia_2024, [1,3,5,6])
+    print("elektronarzedzia_processed")
+    for v in processed_elektronarzedzia_24:
+        print(f"{v}\n")
+
+#save to new file
+    processed_2024 = {
+        'Elektronarzedzia' : processed_elektronarzedzia_24,
+        'Ostrza' : processed_ostrza_24
+    }
+
+    save_data(processed_2024, r"processed\processed_2024.xlsx")

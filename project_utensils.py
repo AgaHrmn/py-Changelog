@@ -2,7 +2,7 @@ import os
 import requests
 from openpyxl import Workbook
 from openpyxl import load_workbook
-from lxml import etree
+
 
 def download_file(url, save_path):
     response = requests.get(url)
@@ -16,9 +16,9 @@ def download_file(url, save_path):
     else:
         print(f"Plik pobrany pomyślnie.")
 
+
 def load_data(xlsx_file):
     sheets_list = []
-
     workbook = load_workbook(filename=xlsx_file)
     sheets = workbook.sheetnames
 
@@ -32,43 +32,48 @@ def load_data(xlsx_file):
 
         sheet_dict[sheet]=rows
         sheets_list.append(sheet_dict)
-
     return sheets_list
 
 
-def save_data(data, output_file):
-    workbook = Workbook()
-
-    for sheet_dict in data:
-        for sheet_name, rows in sheet_dict.items():
-            worksheet = workbook.create_sheet(title=sheet_name)
-            for row in rows:
-                worksheet.append(row)
-
-    workbook.save(filename=output_file)
-
-def sort_column_alphabetically(rows, column_num):
-    sorted_column_values = []
+def sort_column_alphabetically(rows, column_nums):
+    sorted_rows = []
     for row in rows:
-        column_values = row[column_num]
+        sorted_row = list(row) #copy of row to modify
+        for column_num in column_nums:
+            column_values = row[column_num]
 
-        if len(column_values) > 1:
-            column_text = str(column_values)
-            words = column_text.split('\n')
-            words.sort()
-            sorted_string = '\n'.join(words)
-            sorted_column_values.append(sorted_string)
-        else:
-            return sorted_column_values.append(column_values)
-        
-    return sorted_column_values
+            if len(column_values) > 1:
+                column_text = str(column_values)
+                words = column_text.split('\n')
+                words.sort()
+                sorted_string = '\n'.join(words)
+                sorted_row[column_num] = sorted_string #modified row
+        sorted_rows.append(sorted_row)     
+    return sorted_rows
 
-def capitalize_column_values(rows, column_num):
-    capitalized_column_values = []
+
+def capitalize_column_values(rows, column_nums):
+    capitalized_rows = []
 
     for i, row in enumerate(rows):
+        capitalized_row = list(row) #copy of row to mdidy
         if i == 0:
-            capitalized_column_values.append(row[column_num])
+            capitalized_rows.append(row)
         else:
-            capitalized_column_values.append(str(row[column_num]).upper())
-    return capitalized_column_values
+            for column_num in column_nums:
+                capitalized_row[column_num] = str(row[column_num]).upper() #modified row
+            capitalized_rows.append(capitalized_row)
+    return capitalized_rows
+
+
+def save_data(data, output_file):
+    if not os.path.exists("processed"):
+        os.makedirs("processed")
+    workbook = Workbook()
+
+    for sheet_name, rows in data.items():
+        worksheet = workbook.create_sheet(title=sheet_name)
+        for row in rows:
+            worksheet.append(row)
+
+    workbook.save(filename=output_file)
