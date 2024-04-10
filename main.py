@@ -36,11 +36,11 @@ if __name__ == "__main__":
         'Ostrza' : processed_ostrza_23
     }
 
-    save_data(processed_2023, r"processed\processed_2023.xlsx")
+    # save_data(processed_2023, r"processed\processed_2023.xlsx")
 
 #################################################################################################################
 
-#2024
+# 2024
     year_2024_path = r"download\file2.xlsx"
     sheets_2024 = load_data(year_2024_path)
     intro_2024 = sheets_2024[0]['Intro']
@@ -49,11 +49,11 @@ if __name__ == "__main__":
 
 #ostrza_2024
     sorted_column_ostrza_zastosowanie_24 = sort_column_alphabetically(ostrza_2024, [9])
-    processed_ostrza_24 = clear_white_space(capitalize_column_values(sorted_column_ostrza_zastosowanie_24, [1,2,7,9]))
+    processed_ostrza_24 = capitalize_column_values(sorted_column_ostrza_zastosowanie_24, [1,2,7,9])
     print("ostrza_2024_processed")
 
 #elektronarzedzia_2024
-    processed_elektronarzedzia_24 = clear_white_space(capitalize_column_values(elektronarzedzia_2024, [1,3,5,6]))
+    processed_elektronarzedzia_24 = capitalize_column_values(elektronarzedzia_2024, [1,3,5,6])
     print("elektronarzedzia_2024_processed")
 
 #save to new file
@@ -63,4 +63,6 @@ if __name__ == "__main__":
         'Ostrza' : processed_ostrza_24
     }
 
-    save_data(processed_2024, r"processed\processed_2024.xlsx")
+    changes = show_changes(processed_2023, processed_2024)
+    print(changes)
+

@@ -84,9 +84,42 @@ def save_data(data, output_file):
         else:
             print(f"No data found for sheet: {sheet_name}")
 
-
-        # worksheet = workbook.create_sheet(title=sheet_name)
-        # for row in rows:
-        #     worksheet.append(row)
-
     workbook.save(filename=output_file)
+
+def show_changes(file_1, file_2, sheet_name='Elektronarzedzia'):
+    rows_file_1 = file_1[sheet_name][1:]  # Exclude header
+    rows_file_2 = file_2[sheet_name][1:]
+
+    new_in_file_2 = []
+    missing_in_file_2 = []
+
+    ids_file_1 = []
+    for row in rows_file_1:
+        id = row[0]
+        ids_file_1.append(id)
+
+    ids_file_2 = []
+    for row in rows_file_2:
+        id = row[0]
+        ids_file_2.append(id)
+
+    print(ids_file_1)
+    print(ids_file_2)
+
+    #find missing id in file 2
+    for id in ids_file_1:
+        if id not in ids_file_2:
+            missing_in_file_2.append(id)
+
+    #find new id in file 2
+    for id in ids_file_2:
+        if id not in ids_file_1:
+            new_in_file_2.append(id)
+
+    changes = {
+        'new_records': new_in_file_2,
+        'missing_records': missing_in_file_2
+    }
+
+    return changes
+    
