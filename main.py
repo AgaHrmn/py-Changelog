@@ -1,4 +1,5 @@
 from project_utensils import *
+from columns_enum import *
 
 if __name__ == "__main__":
     # urls = [
@@ -29,7 +30,6 @@ if __name__ == "__main__":
     processed_elektronarzedzia_23 = capitalize_column_values(elektronarzedzia_2023, [1,3,5,6])
     print("elektronarzedzia_2023_processed")
 
-#save to new file
     processed_2023 = {
         'Intro' : intro_2023,
         'Elektronarzedzia' : processed_elektronarzedzia_23,
@@ -37,8 +37,6 @@ if __name__ == "__main__":
     }
 
     # save_data(processed_2023, r"processed\processed_2023.xlsx")
-
-#################################################################################################################
 
 # 2024
     year_2024_path = r"download\file2.xlsx"
@@ -56,14 +54,27 @@ if __name__ == "__main__":
     processed_elektronarzedzia_24 = capitalize_column_values(elektronarzedzia_2024, [1,3,5,6])
     print("elektronarzedzia_2024_processed")
 
-#save to new file
     processed_2024 = {
         'Intro' : intro_2024,
         'Elektronarzedzia' : processed_elektronarzedzia_24,
         'Ostrza' : processed_ostrza_24
     }
-    
-#find missing or added records in file 2 based on ID column
-    changes = show_changes(processed_2023, processed_2024)
-    print(changes)
+
+    changes_list_elektronarzedzia= generate_report(processed_2023, processed_2024, Elektronarzedzia, 'Elektronarzedzia')
+    changes_list_ostrza= generate_report(processed_2023, processed_2024, Ostrza, 'Ostrza')
+    changes_list = changes_list_elektronarzedzia + changes_list_ostrza
+
+#create report dictionary
+    intro = [str(f"Raport zmian w latach {extract_year(processed_2023)} i {extract_year(processed_2024)}")]
+    report = {
+        'Intro' : [[i] for i in intro],
+        'Lista zmian' : [[change] for change in changes_list],
+        'Elektronarzedzia' : merge_sheet_info(processed_2023, processed_2024, 'Elektronarzedzia', Elektronarzedzia)
+        # 'Ostrza' : 
+    }
+
+    # print(type(report['Intro']))
+    # print(report['Lista zmian'])
+
+    save_data(report, 'processed.xlsx')
 
