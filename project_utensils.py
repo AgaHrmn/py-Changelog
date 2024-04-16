@@ -245,12 +245,8 @@ def insert_values(row, cells, enum_rep, enum, suffix):
 
             if row[0] == "wycofane" or row[0] == "nowe": 
                 row.insert(full_name.value, None) 
-                
+
             row.insert(full_name.value, cells[column.value])
 
-            # if column.name in cells:
-            #     row.insert(full_name.value, cells[column.value])
-            # else:
-            #     row.insert(full_name.value, None)
 
             
