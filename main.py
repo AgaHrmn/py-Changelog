@@ -24,19 +24,15 @@ if __name__ == "__main__":
 #ostrza_2023
     sorted_column_ostrza_zastosowanie_23 = sort_column_alphabetically(ostrza_2023, [9])
     processed_ostrza_23 = capitalize_column_values(sorted_column_ostrza_zastosowanie_23, [1,2,7,9])
-    print("ostrza_2023_processed")
 
 #elektronarzedzia_2023
     processed_elektronarzedzia_23 = capitalize_column_values(elektronarzedzia_2023, [1,3,5,6])
-    print("elektronarzedzia_2023_processed")
 
     processed_2023 = {
         'Intro' : intro_2023,
         'Elektronarzedzia' : processed_elektronarzedzia_23,
         'Ostrza' : processed_ostrza_23
     }
-
-    # save_data(processed_2023, r"processed\processed_2023.xlsx")
 
 # 2024
     year_2024_path = r"download\file2.xlsx"
@@ -48,11 +44,9 @@ if __name__ == "__main__":
 #ostrza_2024
     sorted_column_ostrza_zastosowanie_24 = sort_column_alphabetically(ostrza_2024, [9])
     processed_ostrza_24 = capitalize_column_values(sorted_column_ostrza_zastosowanie_24, [1,2,7,9])
-    print("ostrza_2024_processed")
 
 #elektronarzedzia_2024
     processed_elektronarzedzia_24 = capitalize_column_values(elektronarzedzia_2024, [1,3,5,6])
-    print("elektronarzedzia_2024_processed")
 
     processed_2024 = {
         'Intro' : intro_2024,
@@ -69,12 +63,17 @@ if __name__ == "__main__":
     report = {
         'Intro' : [[i] for i in intro],
         'Lista zmian' : [[change] for change in changes_list],
-        'Elektronarzedzia' : merge_sheet_info(processed_2023, processed_2024, 'Elektronarzedzia', Elektronarzedzia)
-        # 'Ostrza' : 
+        'Elektronarzedzia' : merge_sheet_info(processed_2023, processed_2024, 'Elektronarzedzia', Elektronarzedzia, ElektronarzedziaReport),
+        # 'Ostrza' merge_sheet_info(processed_2023, processed_2024, 'Ostrza', Ostrza): 
     }
 
-    # print(type(report['Intro']))
-    # print(report['Lista zmian'])
 
-    save_data(report, 'processed.xlsx')
+    
+    # print(report['Intro'])
+    # print(report['Lista zmian'])
+    # print(report['Elektronarzedzia'])
+    save_data(report, r"processed\processed.xlsx")
+
+    # merge_sheet_info(processed_2023, processed_2024, 'Elektronarzedzia', Elektronarzedzia, ElektronarzedziaReport)
+
 

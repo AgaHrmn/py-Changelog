@@ -150,38 +150,15 @@ def generate_report(file_1, file_2, enum, sheet_name):
             modified.append(f"Kolumna {column_name} zmieniła się dla {temp}: {changes['changed_records_ids']}")
     
     if discontinued:
-        discontinued_str = "Narzędzia wycofane z oferty: ['" + "', '".join(discontinued) + "']"
+        discontinued_str = "Narzędzia wycofane z oferty: " + ", ".join(discontinued) 
         list_of_changes.append(discontinued_str)
     if new_products:
-        new_products_str = "Nowe produkty: ['" + "', '".join(new_products) + "']"
+        new_products_str = "Nowe produkty: " + ", ".join(new_products) 
         list_of_changes.append(new_products_str)
     if modified:
         for v in modified:
             list_of_changes.append(v)
-
     return list_of_changes
-
-def merge_sheet_info(file_1, file_2, sheet_name, enum):
-    rows_1 = extract_rows(file_1, sheet_name)
-    rows_2 = extract_rows(file_2, sheet_name)
-
-    merged_rows = []
-
-    for row_1 in rows_1:
-        id_1 = row_1[enum.ID.value]
-        matching_rows = [row_2 for row_2 in rows_2 if row_2[enum.ID.value] == id_1]
-        if matching_rows:
-            merged_row = [f"Modified" if row_1 != row_2 else "Unmodified" for row_1, row_2 in zip(row_1, matching_rows[0])]
-            merged_rows.append(merged_row)
-        else:
-            merged_rows.append(["Discontinued"] + row_1)
-    
-    for row_2 in rows_2:
-        id_2 = row_2[enum.ID.value]
-        if not any(row_1[enum.ID.value] == id_2 for row_1 in rows_1):
-            merged_rows.append(["New"] + row_2)
-    
-    return merged_rows
 
 def save_data(data, output_file):
     if not os.path.exists("processed"):
@@ -202,3 +179,55 @@ def save_data(data, output_file):
 
     workbook.save(filename=output_file)
     
+
+def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
+    rows_1 = extract_rows(file_1, sheet_name)[1:]
+    rows_2 = extract_rows(file_2, sheet_name)[1:]
+    changes_dict = get_changes_dict(file_1, file_2, enum, sheet_name)
+
+    merged_rows = []
+
+    cells_rows_1 = []
+    for row in rows_1:
+        for cell in row:
+            cells_rows_1.append(cell)
+
+    cells_rows_2 = []
+    for row in rows_2:
+        for cell in row:
+            cells_rows_2.append(cell)
+
+    temp_row = []
+    for column in enum_rep:
+        temp_row.append(column.name)
+    merged_rows.append(temp_row)
+
+    temp_row = []
+    for missing_id in changes_dict['ID']['missing_records']:
+        temp_row = ['wycofane', missing_id]
+        for _ in range(len(enum_rep) - 1):
+            temp_row.append(None)  # Append None for the rest of the columns
+        print(temp_row)
+        merged_rows.append(temp_row)
+    
+    
+    temp_row = []
+    for column in enum_rep:
+        temp_row.append(None)
+    for column_r in enum_rep:
+        if "2023" in column_r.name:
+            for column in enum:
+                if column.name in column_r.name:
+                    for cell in cells_rows_1:
+                        temp_row[column_r.value] = cell
+        if "2024" in column_r.name:
+            for column in enum:
+                if column.name in column_r.name:
+                    for cell in cells_rows_2:
+                        temp_row[column_r.value] = cell
+        print(temp_row)
+        merged_rows.append(temp_row)
+
+    print(merged_rows)
+    return merged_rows
+            
