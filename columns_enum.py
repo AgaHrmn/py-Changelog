@@ -27,10 +27,10 @@ class Ostrza(Enum):
 class ElektronarzedziaReport(Enum):
     STATUS = 0
     ID = 1
-    NAZWA_2023 = 2
-    NAZWA_2024 = 3
-    OPIS_2023 = 4
-    OPIS_2024 = 5
+    NAZWA_23 = 2
+    NAZWA_24 = 3
+    OPIS_23 = 4
+    OPIS_24 = 5
     TYP_OSTRZA_23 = 6
     TYP_OSTRZA_24 = 7
     MOC_SILNIKA_23 = 8

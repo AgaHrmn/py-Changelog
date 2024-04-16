@@ -196,31 +196,23 @@ def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
     for missing_id in changes_dict['ID']['missing_records']:
         temp_row = ['wycofane', missing_id]
         processed_ids.append(missing_id)
-        for _ in range(len(enum_rep) - 1):
-            temp_row.append(None)  # Append None for the rest of the columns
         merged_rows.append(temp_row)
 
     temp_row = []
     for new_id in changes_dict['ID']['new_records']:
         temp_row = ['nowe', new_id]
         processed_ids.append(new_id)
-        for _ in range(len(enum_rep) - 1):
-            temp_row.append(None)  # Append None for the rest of the columns
         merged_rows.append(temp_row)
     
     temp_row = []
     for column_name, changes in changes_dict.items():
         most_changes = 0
         if len(changes['changed_records_ids']) > most_changes:
-            most_changes = changes['changed_records_ids']
+            most_changes = len(changes['changed_records_ids'])
             most_changes_column = column_name
-    
-    temp_row = []
     for changed_id in changes_dict[most_changes_column]['changed_records_ids']:
-        temp_row = ['zmodyfikowane', changed_id]
         processed_ids.append(changed_id)
-        for _ in range(len(enum_rep) - 1):
-            temp_row.append(None)  # Append None for the rest of the columns
+        temp_row = ['zmodyfikowane', changed_id]
         merged_rows.append(temp_row)
     
     temp_row = []
@@ -231,21 +223,42 @@ def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
         else :
             continue
         merged_rows.append(temp_row)    
-    
+
+    for row in merged_rows[1:]:
+        
+        for cells_23 in rows_1:
+            if row[1] == cells_23[0]:
+                row.insert(enum_rep.NAZWA_23.value,cells_23[enum.NAZWA.value])
+                row.insert(enum_rep.OPIS_23.value,cells_23[enum.OPIS.value])
+                row.insert(enum_rep.TYP_OSTRZA_23.value,cells_23[enum.TYP_OSTRZA.value])
+                row.insert(enum_rep.MOC_SILNIKA_23.value,cells_23[enum.MOC_SILNIKA.value])
+                row.insert(enum_rep.TYP_SILNIKA_23.value,cells_23[enum.TYP_SILNIKA.value])
+                row.insert(enum_rep.TYP_ZASILANIA_23.value,cells_23[enum.TYP_ZASILANIA.value])
+                row.insert(enum_rep.CENA_23.value,cells_23[enum.CENA.value])
+        
+        for cells_24 in rows_2:
+            if row[1] == cells_24[0]:
+                row.insert(enum_rep.NAZWA_24.value,cells_24[enum.NAZWA.value])
+                row.insert(enum_rep.OPIS_24.value,cells_24[enum.OPIS.value])
+                row.insert(enum_rep.TYP_OSTRZA_24.value,cells_24[enum.TYP_OSTRZA.value])
+                row.insert(enum_rep.MOC_SILNIKA_24.value,cells_24[enum.MOC_SILNIKA.value])
+                row.insert(enum_rep.TYP_SILNIKA_24.value,cells_24[enum.TYP_SILNIKA.value])
+                row.insert(enum_rep.TYP_ZASILANIA_24.value,cells_24[enum.TYP_ZASILANIA.value])
+                row.insert(enum_rep.CENA_24.value,cells_24[enum.CENA.value])
+        print(row)
+        
+
+        # for cells_23 in rows_1:
+        #     if id == cells_23[0]:
+        #         for column_rep in enum_rep:
+        #             if "23" in column_rep.name:
+        #                 num_col_rep = column_rep.value
+        #                 for column in enum:
+        #                     num_col = column.value
+        #                     row.insert(num_col_rep,cells_23[num_col])
+        #   merged_rows.append(temp_row)
+
     return merged_rows
 
-    # temp_row = [None] * len(enum_rep)
-    # for column_r in enum_rep:
-    #     for column in enum:
-    #         if column.name == "ID" :
-    #             temp_row[column_r.ID.value] = rows_2[0][0]
-    #         if "23" in column_r.name and column.name in column_r.name:
-    #             for cell in rows_1:
-    #                 temp_row[column_r.value] = cell[column.value]
-                        
-    #         elif "24" in column_r.name and column.name in column_r.name:
-    #             for cell in rows_2:
-    #                 temp_row[column_r.value] = cell[column.value]
-    #     merged_rows.append(temp_row)
 
             
