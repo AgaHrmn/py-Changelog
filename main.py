@@ -66,14 +66,6 @@ if __name__ == "__main__":
         'Elektronarzedzia' : merge_sheet_info(processed_2023, processed_2024, 'Elektronarzedzia', Elektronarzedzia, ElektronarzedziaReport),
         # 'Ostrza' merge_sheet_info(processed_2023, processed_2024, 'Ostrza', Ostrza): 
     }
-
-
-    
-    # print(report['Intro'])
-    # print(report['Lista zmian'])
-    # print(report['Elektronarzedzia'])
     save_data(report, r"processed\processed.xlsx")
-
-    # merge_sheet_info(processed_2023, processed_2024, 'Elektronarzedzia', Elektronarzedzia, ElektronarzedziaReport)
 
 

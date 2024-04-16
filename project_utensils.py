@@ -184,18 +184,8 @@ def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
     rows_1 = extract_rows(file_1, sheet_name)[1:]
     rows_2 = extract_rows(file_2, sheet_name)[1:]
     changes_dict = get_changes_dict(file_1, file_2, enum, sheet_name)
-
+    processed_ids = []
     merged_rows = []
-
-    cells_rows_1 = []
-    for row in rows_1:
-        for cell in row:
-            cells_rows_1.append(cell)
-
-    cells_rows_2 = []
-    for row in rows_2:
-        for cell in row:
-            cells_rows_2.append(cell)
 
     temp_row = []
     for column in enum_rep:
@@ -205,29 +195,57 @@ def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
     temp_row = []
     for missing_id in changes_dict['ID']['missing_records']:
         temp_row = ['wycofane', missing_id]
+        processed_ids.append(missing_id)
         for _ in range(len(enum_rep) - 1):
             temp_row.append(None)  # Append None for the rest of the columns
-        print(temp_row)
-        merged_rows.append(temp_row)
-    
-    
-    temp_row = []
-    for column in enum_rep:
-        temp_row.append(None)
-    for column_r in enum_rep:
-        if "2023" in column_r.name:
-            for column in enum:
-                if column.name in column_r.name:
-                    for cell in cells_rows_1:
-                        temp_row[column_r.value] = cell
-        if "2024" in column_r.name:
-            for column in enum:
-                if column.name in column_r.name:
-                    for cell in cells_rows_2:
-                        temp_row[column_r.value] = cell
-        print(temp_row)
         merged_rows.append(temp_row)
 
-    print(merged_rows)
+    temp_row = []
+    for new_id in changes_dict['ID']['new_records']:
+        temp_row = ['nowe', new_id]
+        processed_ids.append(new_id)
+        for _ in range(len(enum_rep) - 1):
+            temp_row.append(None)  # Append None for the rest of the columns
+        merged_rows.append(temp_row)
+    
+    temp_row = []
+    for column_name, changes in changes_dict.items():
+        most_changes = 0
+        if len(changes['changed_records_ids']) > most_changes:
+            most_changes = changes['changed_records_ids']
+            most_changes_column = column_name
+    
+    temp_row = []
+    for changed_id in changes_dict[most_changes_column]['changed_records_ids']:
+        temp_row = ['zmodyfikowane', changed_id]
+        processed_ids.append(changed_id)
+        for _ in range(len(enum_rep) - 1):
+            temp_row.append(None)  # Append None for the rest of the columns
+        merged_rows.append(temp_row)
+    
+    temp_row = []
+    for row in rows_2:
+        id = row[0]
+        if id not in processed_ids:
+            temp_row = ['-', id]
+        else :
+            continue
+        merged_rows.append(temp_row)    
+    
     return merged_rows
+
+    # temp_row = [None] * len(enum_rep)
+    # for column_r in enum_rep:
+    #     for column in enum:
+    #         if column.name == "ID" :
+    #             temp_row[column_r.ID.value] = rows_2[0][0]
+    #         if "23" in column_r.name and column.name in column_r.name:
+    #             for cell in rows_1:
+    #                 temp_row[column_r.value] = cell[column.value]
+                        
+    #         elif "24" in column_r.name and column.name in column_r.name:
+    #             for cell in rows_2:
+    #                 temp_row[column_r.value] = cell[column.value]
+    #     merged_rows.append(temp_row)
+
             
