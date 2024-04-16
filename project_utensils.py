@@ -184,7 +184,9 @@ def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
     rows_1 = extract_rows(file_1, sheet_name)[1:]
     rows_2 = extract_rows(file_2, sheet_name)[1:]
     changes_dict = get_changes_dict(file_1, file_2, enum, sheet_name)
-    processed_ids = []
+    new_ids= []
+    missing_ids= []
+    changed_ids= []
     merged_rows = []
 
     temp_row = []
@@ -194,27 +196,26 @@ def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
 
     temp_row = []
     for missing_id in changes_dict['ID']['missing_records']:
-        temp_row = ['wycofane', missing_id]
-        processed_ids.append(missing_id)
+        temp_row = ['wycofane', missing_id] + []* len(enum_rep)
+        missing_ids.append(missing_id)
         merged_rows.append(temp_row)
 
     temp_row = []
     for new_id in changes_dict['ID']['new_records']:
-        temp_row = ['nowe', new_id]
-        processed_ids.append(new_id)
+        temp_row = ['nowe', new_id] + []* len(enum_rep)
+        new_ids.append(new_id)
         merged_rows.append(temp_row)
     
     temp_row = []
     for column_name, changes in changes_dict.items():
-        most_changes = 0
-        if len(changes['changed_records_ids']) > most_changes:
-            most_changes = len(changes['changed_records_ids'])
-            most_changes_column = column_name
-    for changed_id in changes_dict[most_changes_column]['changed_records_ids']:
-        processed_ids.append(changed_id)
-        temp_row = ['zmodyfikowane', changed_id]
+        for changed_id in changes_dict[column_name]['changed_records_ids']:
+            changed_ids.append(changed_id)
+    changed_ids_set = set(changed_ids)
+    for id in changed_ids_set:
+        temp_row = ['zmodyfikowane', id]
         merged_rows.append(temp_row)
     
+    processed_ids = new_ids+missing_ids+changed_ids
     temp_row = []
     for row in rows_2:
         id = row[0]
@@ -225,40 +226,31 @@ def merge_sheet_info(file_1, file_2, sheet_name, enum, enum_rep):
         merged_rows.append(temp_row)    
 
     for row in merged_rows[1:]:
-        
         for cells_23 in rows_1:
             if row[1] == cells_23[0]:
-                row.insert(enum_rep.NAZWA_23.value,cells_23[enum.NAZWA.value])
-                row.insert(enum_rep.OPIS_23.value,cells_23[enum.OPIS.value])
-                row.insert(enum_rep.TYP_OSTRZA_23.value,cells_23[enum.TYP_OSTRZA.value])
-                row.insert(enum_rep.MOC_SILNIKA_23.value,cells_23[enum.MOC_SILNIKA.value])
-                row.insert(enum_rep.TYP_SILNIKA_23.value,cells_23[enum.TYP_SILNIKA.value])
-                row.insert(enum_rep.TYP_ZASILANIA_23.value,cells_23[enum.TYP_ZASILANIA.value])
-                row.insert(enum_rep.CENA_23.value,cells_23[enum.CENA.value])
+                insert_values(row, cells_23, enum_rep, enum,"_23")
         
         for cells_24 in rows_2:
             if row[1] == cells_24[0]:
-                row.insert(enum_rep.NAZWA_24.value,cells_24[enum.NAZWA.value])
-                row.insert(enum_rep.OPIS_24.value,cells_24[enum.OPIS.value])
-                row.insert(enum_rep.TYP_OSTRZA_24.value,cells_24[enum.TYP_OSTRZA.value])
-                row.insert(enum_rep.MOC_SILNIKA_24.value,cells_24[enum.MOC_SILNIKA.value])
-                row.insert(enum_rep.TYP_SILNIKA_24.value,cells_24[enum.TYP_SILNIKA.value])
-                row.insert(enum_rep.TYP_ZASILANIA_24.value,cells_24[enum.TYP_ZASILANIA.value])
-                row.insert(enum_rep.CENA_24.value,cells_24[enum.CENA.value])
-        print(row)
-        
-
-        # for cells_23 in rows_1:
-        #     if id == cells_23[0]:
-        #         for column_rep in enum_rep:
-        #             if "23" in column_rep.name:
-        #                 num_col_rep = column_rep.value
-        #                 for column in enum:
-        #                     num_col = column.value
-        #                     row.insert(num_col_rep,cells_23[num_col])
-        #   merged_rows.append(temp_row)
-
+                insert_values(row, cells_24, enum_rep, enum, "_24")  
     return merged_rows
 
+def insert_values(row, cells, enum_rep, enum, suffix):
+    for column in enum:
+        if column.name == "ID":
+            continue
+        else:
+            column_rep_name = f"{column.name}{suffix}"
+            full_name = getattr(enum_rep, column_rep_name)
+
+            if row[0] == "wycofane" or row[0] == "nowe": 
+                row.insert(full_name.value, None) 
+                
+            row.insert(full_name.value, cells[column.value])
+
+            # if column.name in cells:
+            #     row.insert(full_name.value, cells[column.value])
+            # else:
+            #     row.insert(full_name.value, None)
 
             

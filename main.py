@@ -64,7 +64,7 @@ if __name__ == "__main__":
         'Intro' : [[i] for i in intro],
         'Lista zmian' : [[change] for change in changes_list],
         'Elektronarzedzia' : merge_sheet_info(processed_2023, processed_2024, 'Elektronarzedzia', Elektronarzedzia, ElektronarzedziaReport),
-        # 'Ostrza' merge_sheet_info(processed_2023, processed_2024, 'Ostrza', Ostrza): 
+        'Ostrza' : merge_sheet_info(processed_2023, processed_2024, 'Ostrza', Ostrza, OstrzaReport)
     }
     save_data(report, r"processed\processed.xlsx")
 

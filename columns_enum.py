@@ -41,3 +41,27 @@ class ElektronarzedziaReport(Enum):
     TYP_ZASILANIA_24 = 13
     CENA_23 = 14
     CENA_24 = 15
+
+class OstrzaReport(Enum): 
+    STATUS = 0
+    ID = 1
+    NAZWA_23 = 2
+    NAZWA_24 = 3
+    TYP_23 = 4
+    TYP_24 = 5
+    OPIS_23 = 6
+    OPIS_24 = 7
+    DLUGOSC_23 = 8
+    DLUGOSC_24 = 9
+    SREDNICA_23 = 10
+    SREDNICA_24 = 11
+    GRUBOSC_23 = 12
+    GRUBOSC_24 = 13
+    MATERIAL_23 = 14
+    MATERIAL_24 = 15
+    LICZBA_ZEBOW_23 = 16
+    LICZBA_ZEBOW_24 = 17
+    ZASTOSOWANIE_23 = 18
+    ZASTOSOWANIE_24 = 19
+    CENA_23 = 20 
+    CENA_24 = 21 
